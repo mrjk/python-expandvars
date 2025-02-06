@@ -228,9 +228,15 @@ class ExpandParser:
             else:
                 # Anything else
                 n = len(buff)
-                return self.getenv("".join(buff), indirect=False) + self.expand(
-                    vars_[n:]
-                )
+                if n > 0:
+                    # If a valid variable name is found, expand it
+                    return str(
+                        self.getenv("".join(buff), indirect=False)
+                    ) + self.expand(vars_[n:])
+                else:
+                    # If the name is empty, then it's probably not a variable
+                    return var_symbol + self.expand(vars_)
+
         return self.getenv("".join(buff), indirect=False)
 
     def _expand_modifier_var(self, vars_):
