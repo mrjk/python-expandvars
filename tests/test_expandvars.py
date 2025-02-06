@@ -63,6 +63,15 @@ def test_expandvars_pid():
     assert expandvars.expandvars("$$") == str(getpid())
     assert expandvars.expandvars("PID( $$ )") == "PID( {0} )".format(getpid())
 
+@patch.dict(env, {}, clear=True)
+def test_expandvars_pid_without_pid():
+    importlib.reload(expandvars)
+
+    assert expandvars.expandvars("$$", feat_pid=True) == str(getpid())
+    assert expandvars.expandvars("$$", feat_pid=False) == "$$"
+    assert expandvars.expandvars("$$", feat_pid="$$") == "$$"
+    assert expandvars.expandvars("$$", feat_pid="not_authorized") == "not_authorized"
+
 
 @patch.dict(env, {"ALTERNATE": "Alternate", "EMPTY": ""}, clear=True)
 def test_expandvars_get_default():

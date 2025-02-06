@@ -123,6 +123,8 @@ class ExpandParser:
             Defaults to False.
         environ (Mapping): Elements to consider during variable expansion. Defaults to os.environ.
         var_symbol (str): Character used to identify a variable. Defaults to $.
+        feat_pid (bool,str): If True, enables PID expansion ($$). If string, then always return this
+            hardcoded value instead. Defaults to True.
 
     Example:
         >>> parser = ExpandParser(environ={"PATH": "/usr/bin"})
@@ -130,10 +132,14 @@ class ExpandParser:
         '/usr/bin:/usr/local/bin'
     """
 
-    def __init__(self, nounset=False, environ=os.environ, var_symbol="$"):
+    def __init__(
+        self, nounset=False, environ=os.environ, var_symbol="$", feat_pid=True
+    ):
         self.nounset = nounset
         self.environ = environ
         self.var_symbol = var_symbol
+
+        self.feat_pid = feat_pid
 
     def getenv(self, var, indirect=False, default=None):
         """Get value from environment variable.
@@ -195,7 +201,16 @@ class ExpandParser:
             return var_symbol + self.escape(vars_[1:])
 
         if vars_[0] == var_symbol:
-            return str(os.getpid()) + self.expand(vars_[1:])
+            if self.feat_pid is True:
+                # Return process current pid
+                return str(os.getpid()) + self.expand(vars_[1:])
+
+            if isinstance(self.feat_pid, str):
+                # Return feat_pid string
+                return self.feat_pid
+
+            # Returns the original variable
+            return var_symbol + self.expand(vars_)
 
         if vars_[0] == "{":
             return self._expand_modifier_var(vars_[1:])
