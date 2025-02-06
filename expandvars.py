@@ -194,12 +194,15 @@ class ExpandParser:
         """Expand a single variable."""
         var_symbol = self.var_symbol
 
+        # Support for EoL $^
         if len(vars_) == 0:
             return var_symbol
 
+        # Support for $\
         if vars_[0] == ESCAPE_CHAR:
             return var_symbol + self.escape(vars_[1:])
 
+        # Support for: $$
         if vars_[0] == var_symbol:
             if self.feat_pid is True:
                 # Return process current pid
@@ -212,14 +215,18 @@ class ExpandParser:
             # Returns the original variable
             return var_symbol + self.expand(vars_)
 
+        # Support for: ${
         if vars_[0] == "{":
             return self._expand_modifier_var(vars_[1:])
 
+        # Support for: $*
         buff = []
         for c in vars_:
             if _valid_char(c):
+                # Support for: $[a-zA-Z0-9_]
                 buff.append(c)
             else:
+                # Anything else
                 n = len(buff)
                 return self.getenv("".join(buff), indirect=False) + self.expand(
                     vars_[n:]
