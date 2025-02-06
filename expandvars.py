@@ -190,6 +190,7 @@ class ExpandParser:
 
         return ESCAPE_CHAR + vars_[0] + self.expand(vars_[1:])
 
+    # pylint: disable=too-many-return-statements
     def expand_var(self, vars_):
         """Expand a single variable."""
         var_symbol = self.var_symbol
@@ -204,16 +205,27 @@ class ExpandParser:
 
         # Support for: $$
         if vars_[0] == var_symbol:
-            if self.feat_pid is True:
-                # Return process current pid
-                return str(os.getpid()) + self.expand(vars_[1:])
 
-            if isinstance(self.feat_pid, str):
-                # Return feat_pid string
-                return self.feat_pid
+            # Count how many $ symbols appear in sequence
+            times = 2
+            for c in vars_[1:]:
+                if c != var_symbol:
+                    break
+                times += 1
 
-            # Returns the original variable
-            return var_symbol + self.expand(vars_)
+            if times == 2:
+                # We only process pid if $$, not more.
+
+                if self.feat_pid is True:
+                    # Return process current pid
+                    return str(os.getpid()) + self.expand(vars_[1:])
+
+                if isinstance(self.feat_pid, str):
+                    # Return feat_pid string
+                    return self.feat_pid + self.expand(vars_[1:])
+
+            # If more than 2, then skip until next not var_symbol
+            return var_symbol * times + self.expand(vars_[times - 1 :])
 
         # Support for: ${
         if vars_[0] == "{":
@@ -233,9 +245,9 @@ class ExpandParser:
                     return str(
                         self.getenv("".join(buff), indirect=False)
                     ) + self.expand(vars_[n:])
-                else:
-                    # If the name is empty, then it's probably not a variable
-                    return var_symbol + self.expand(vars_)
+
+                # If the name is empty, then it's probably not a variable
+                return var_symbol + self.expand(vars_)
 
         return self.getenv("".join(buff), indirect=False)
 

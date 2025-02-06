@@ -73,6 +73,23 @@ def test_expandvars_pid_without_pid():
     assert expandvars.expandvars("$$", feat_pid="not_authorized") == "not_authorized"
 
 
+@patch.dict(env, {"FOO": "foo", "BAR": "bar"}, clear=True)
+def test_expandvars_pid_extras():
+    importlib.reload(expandvars)
+
+    assert expandvars.expandvars("$$FOO", feat_pid=False) == "$$FOO"
+    assert expandvars.expandvars("$$FOO", feat_pid="unauthorized") == "unauthorizedFOO"
+    assert expandvars.expandvars("$$$FOO", feat_pid=False) == "$$$FOO"
+    assert expandvars.expandvars("$$$FOO", feat_pid="unauthorized") == "$$$FOO"
+    assert expandvars.expandvars("$$$$FOO", feat_pid="unauthorized") == "$$$$FOO"
+    assert expandvars.expandvars("$$$$$FOO", feat_pid=False) == "$$$$$FOO"
+    assert expandvars.expandvars("$$$$$$FOO", feat_pid=False) == "$$$$$$FOO"
+    assert expandvars.expandvars("$$$$$$FOO", feat_pid="") == "$$$$$$FOO"
+    assert expandvars.expandvars("$$$$$$$FOO", feat_pid="unauthorized") == "$$$$$$$FOO"
+    assert expandvars.expandvars("$$$$$$$FOO", feat_pid=True) == "$$$$$$$FOO"
+    assert expandvars.expandvars("$$ $FOO $$", feat_pid="unauthorized") == "unauthorized foo unauthorized"
+
+
 @patch.dict(env, {"ALTERNATE": "Alternate", "EMPTY": ""}, clear=True)
 def test_expandvars_get_default():
     importlib.reload(expandvars)
@@ -185,6 +202,7 @@ def test_escape():
         expandvars.expandvars("D:\\\\some\\windows\\path")
         == "D:\\\\some\\windows\\path"
     )
+
 
 
 @patch.dict(env, {}, clear=True)
@@ -358,3 +376,19 @@ def test_expand_var_symbol(var_symbol):
         )
         == "test,$HOME"
     )
+
+
+
+@patch.dict(env, {"FOO": "foo", "BAR": "bar"}, clear=True)
+def test_usecases_extra():
+    importlib.reload(expandvars)
+
+    with pytest.raises(expandvars.MissingClosingBrace):
+        assert expandvars.expandvars("${FOO", nounset=False) == "${FOO"
+    assert expandvars.expandvars("{FOO", feat_pid=False, nounset=True) == "{FOO"
+
+    with pytest.raises(expandvars.BadSubstitution):
+        assert expandvars.expandvars("${}", nounset=True) == "${}"
+    with pytest.raises(expandvars.BadSubstitution):
+        assert expandvars.expandvars("${", nounset=False) == "${"
+
