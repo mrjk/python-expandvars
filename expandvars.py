@@ -251,9 +251,10 @@ class ExpandParser:
                 buff.append(c)
             elif c == "}":
                 n = len(buff) + 1
-                return self.getenv("".join(buff), indirect=indirect) + self.expand(
+                return str(self.getenv("".join(buff), indirect=indirect)) + self.expand(
                     vars_[n:]
                 )
+
             else:
                 n = len(buff)
                 if c == ":":
@@ -348,7 +349,7 @@ class ExpandParser:
             offset = 0
         else:
             offset = int(offset_str)
-        return self.getenv(var, indirect=False)[offset:]
+        return str(self.getenv(var, indirect=False))[offset:]
 
     def _expand_length(self, var, modifier, offset):
         """Expand variable with offset and length."""
@@ -371,7 +372,7 @@ class ExpandParser:
         else:
             width = offset + length
 
-        return self.getenv(var, indirect=False)[offset:width]
+        return str(self.getenv(var, indirect=False))[offset:width]
 
     def _expand_substitute(self, var, modifier):
         """Expand or return substitute."""
