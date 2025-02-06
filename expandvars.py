@@ -198,7 +198,7 @@ class ExpandParser:
             return str(os.getpid()) + self.expand(vars_[1:])
 
         if vars_[0] == "{":
-            return self.expand_modifier_var(vars_[1:])
+            return self._expand_modifier_var(vars_[1:])
 
         buff = []
         for c in vars_:
@@ -211,7 +211,7 @@ class ExpandParser:
                 )
         return self.getenv("".join(buff), indirect=False)
 
-    def expand_modifier_var(self, vars_):
+    def _expand_modifier_var(self, vars_):
         """Expand variables with modifier."""
 
         if len(vars_) <= 1:
@@ -236,11 +236,11 @@ class ExpandParser:
                 n = len(buff)
                 if c == ":":
                     n += 1
-                return self.expand_advanced("".join(buff), vars_[n:], indirect=indirect)
+                return self._expand_advanced("".join(buff), vars_[n:], indirect=indirect)
 
         raise MissingClosingBrace("".join(buff))
 
-    def expand_advanced(self, var, vars_, indirect=False):
+    def _expand_advanced(self, var, vars_, indirect=False):
         """Expand substitution."""
 
         if len(vars_) == 0:
@@ -271,26 +271,26 @@ class ExpandParser:
             raise BadSubstitution(var)
 
         if modifier[0] == "-":
-            return self.expand_default(
+            return self._expand_default(
                 var, modifier=modifier[1:], set_=False, indirect=indirect
             ) + self.expand(vars_)
 
         if modifier[0] == "=":
-            return self.expand_default(
+            return self._expand_default(
                 var, modifier=modifier[1:], set_=True, indirect=indirect
             ) + self.expand(vars_)
 
         if modifier[0] == "+":
-            return self.expand_substitute(var, modifier=modifier[1:]) + self.expand(
+            return self._expand_substitute(var, modifier=modifier[1:]) + self.expand(
                 vars_
             )
 
         if modifier[0] == "?":
-            return self.expand_strict(var, modifier=modifier[1:]) + self.expand(vars_)
+            return self._expand_strict(var, modifier=modifier[1:]) + self.expand(vars_)
 
-        return self.expand_offset(var, modifier=modifier) + self.expand(vars_)
+        return self._expand_offset(var, modifier=modifier) + self.expand(vars_)
 
-    def expand_strict(self, var, modifier):
+    def _expand_strict(self, var, modifier):
         """Expand variable that must be defined."""
         environ = self.environ
 
@@ -301,7 +301,7 @@ class ExpandParser:
             return RECOVER_NULL
         raise ParameterNullOrNotSet(var, modifier if modifier else None)
 
-    def expand_offset(self, var, modifier):
+    def _expand_offset(self, var, modifier):
         """Expand variable with offset."""
 
         buff = []
@@ -314,7 +314,7 @@ class ExpandParser:
                 else:
                     offset = int(offset_str)
 
-                return self.expand_length(var, modifier=modifier[n:], offset=offset)
+                return self._expand_length(var, modifier=modifier[n:], offset=offset)
 
             buff.append(c)
 
@@ -326,7 +326,7 @@ class ExpandParser:
             offset = int(offset_str)
         return self.getenv(var, indirect=False)[offset:]
 
-    def expand_length(self, var, modifier, offset):
+    def _expand_length(self, var, modifier, offset):
         """Expand variable with offset and length."""
 
         length_str = modifier.strip()
@@ -349,7 +349,7 @@ class ExpandParser:
 
         return self.getenv(var, indirect=False)[offset:width]
 
-    def expand_substitute(self, var, modifier):
+    def _expand_substitute(self, var, modifier):
         """Expand or return substitute."""
         environ = self.environ
 
@@ -357,7 +357,7 @@ class ExpandParser:
             return modifier
         return ""
 
-    def expand_default(self, var, modifier, set_, indirect):
+    def _expand_default(self, var, modifier, set_, indirect):
         """Expand var or return default."""
         environ = self.environ
 
