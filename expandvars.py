@@ -258,7 +258,9 @@ class ExpandParser:
                 n = len(buff)
                 if c == ":":
                     n += 1
-                return self._expand_advanced("".join(buff), vars_[n:], indirect=indirect)
+                return self._expand_advanced(
+                    "".join(buff), vars_[n:], indirect=indirect
+                )
 
         raise MissingClosingBrace("".join(buff))
 
@@ -426,7 +428,7 @@ class ExpandParser:
             raise BadSubstitution(vars_)
 
 
-def expand(vars_, nounset=False, environ=os.environ, var_symbol="$"):
+def expand(vars_, nounset=False, environ=os.environ, var_symbol="$", **kwargs):
     """Expand variables Unix style.
 
     Params:
@@ -434,6 +436,7 @@ def expand(vars_, nounset=False, environ=os.environ, var_symbol="$"):
         nounset (bool): If True, enables strict parsing (similar to set -u / set -o nounset in bash).
         environ (Mapping): Elements to consider during variable expansion. Defaults to os.environ
         var_symbol (str): Character used to identify a variable. Defaults to $
+        **kwargs: Additional keyword arguments to pass to ExpandParser.
 
     Returns:
         str: Expanded values.
@@ -449,11 +452,13 @@ def expand(vars_, nounset=False, environ=os.environ, var_symbol="$"):
         with open(somefile) as f:
             print(expand(f))
     """
-    parser = ExpandParser(nounset=nounset, environ=environ, var_symbol=var_symbol)
+    parser = ExpandParser(
+        nounset=nounset, environ=environ, var_symbol=var_symbol, **kwargs
+    )
     return parser.expand(vars_)
 
 
-def expandvars(vars_, nounset=False):
+def expandvars(vars_, nounset=False, **kwargs):
     """Expand system variables Unix style.
 
     Params:
@@ -474,4 +479,4 @@ def expandvars(vars_, nounset=False):
         with open(somefile) as f:
             print(expandvars(f))
     """
-    return expand(vars_, nounset=nounset)
+    return expand(vars_, nounset=nounset, **kwargs)
