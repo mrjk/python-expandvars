@@ -1,4 +1,20 @@
 # -*- coding: utf-8 -*-
+"""Expand system variables Unix style.
+
+Provides functions and classes for expanding environment variables in strings using
+Unix-style syntax. Supports various expansion formats including default values, error
+handling, and substring operations.
+"""
+
+# pylint: disable=consider-using-f-string
+# pylint: disable=raise-missing-from
+# pylint: disable=dangerous-default-value
+# pylint: disable=invalid-name
+# pylint: disable=missing-class-docstring
+# pylint: disable=line-too-long
+# pylint: disable=no-else-break
+# pylint: disable=too-many-branches
+# pylint: disable=no-else-raise
 
 import os
 from io import TextIOWrapper
@@ -42,8 +58,6 @@ RECOVER_NULL = os.environ.get("EXPANDVARS_RECOVER_NULL", None)
 
 class ExpandvarsException(Exception):
     """The base exception for all the handleable exceptions."""
-
-    pass
 
 
 class MissingClosingBrace(ExpandvarsException, SyntaxError):
@@ -115,7 +129,7 @@ class ExpandParser:
         >>> parser.expand("$PATH:/usr/local/bin")
         '/usr/bin:/usr/local/bin'
     """
-    
+
     def __init__(self, nounset=False, environ=os.environ, var_symbol="$"):
         self.nounset = nounset
         self.environ = environ
@@ -151,8 +165,6 @@ class ExpandParser:
 
     def escape(self, vars_):
         """Escape the first character."""
-        nounset = self.nounset
-        environ = self.environ
         var_symbol = self.var_symbol
 
         if len(vars_) == 0:
@@ -174,8 +186,6 @@ class ExpandParser:
 
     def expand_var(self, vars_):
         """Expand a single variable."""
-        nounset = self.nounset
-        environ = self.environ
         var_symbol = self.var_symbol
 
         if len(vars_) == 0:
@@ -196,14 +206,13 @@ class ExpandParser:
                 buff.append(c)
             else:
                 n = len(buff)
-                return self.getenv("".join(buff), indirect=False) + self.expand(vars_[n:])
+                return self.getenv("".join(buff), indirect=False) + self.expand(
+                    vars_[n:]
+                )
         return self.getenv("".join(buff), indirect=False)
 
     def expand_modifier_var(self, vars_):
         """Expand variables with modifier."""
-        nounset = self.nounset
-        environ = self.environ
-        var_symbol = self.var_symbol
 
         if len(vars_) <= 1:
             raise BadSubstitution(vars_)
@@ -220,7 +229,9 @@ class ExpandParser:
                 buff.append(c)
             elif c == "}":
                 n = len(buff) + 1
-                return self.getenv("".join(buff), indirect=indirect) + self.expand(vars_[n:])
+                return self.getenv("".join(buff), indirect=indirect) + self.expand(
+                    vars_[n:]
+                )
             else:
                 n = len(buff)
                 if c == ":":
@@ -231,9 +242,6 @@ class ExpandParser:
 
     def expand_advanced(self, var, vars_, indirect=False):
         """Expand substitution."""
-        nounset = self.nounset
-        environ = self.environ
-        var_symbol = self.var_symbol
 
         if len(vars_) == 0:
             raise MissingClosingBrace(var)
@@ -263,13 +271,19 @@ class ExpandParser:
             raise BadSubstitution(var)
 
         if modifier[0] == "-":
-            return self.expand_default(var, modifier=modifier[1:], set_=False, indirect=indirect) + self.expand(vars_)
+            return self.expand_default(
+                var, modifier=modifier[1:], set_=False, indirect=indirect
+            ) + self.expand(vars_)
 
         if modifier[0] == "=":
-            return self.expand_default(var, modifier=modifier[1:], set_=True, indirect=indirect) + self.expand(vars_)
+            return self.expand_default(
+                var, modifier=modifier[1:], set_=True, indirect=indirect
+            ) + self.expand(vars_)
 
         if modifier[0] == "+":
-            return self.expand_substitute(var, modifier=modifier[1:]) + self.expand(vars_)
+            return self.expand_substitute(var, modifier=modifier[1:]) + self.expand(
+                vars_
+            )
 
         if modifier[0] == "?":
             return self.expand_strict(var, modifier=modifier[1:]) + self.expand(vars_)
@@ -289,8 +303,6 @@ class ExpandParser:
 
     def expand_offset(self, var, modifier):
         """Expand variable with offset."""
-        nounset = self.nounset
-        environ = self.environ
 
         buff = []
         for c in modifier:
@@ -316,8 +328,6 @@ class ExpandParser:
 
     def expand_length(self, var, modifier, offset):
         """Expand variable with offset and length."""
-        nounset = self.nounset
-        environ = self.environ
 
         length_str = modifier.strip()
         if not length_str:
@@ -349,7 +359,6 @@ class ExpandParser:
 
     def expand_default(self, var, modifier, set_, indirect):
         """Expand var or return default."""
-        nounset = self.nounset
         environ = self.environ
 
         if set_ and not environ.get(var):
