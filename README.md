@@ -2,8 +2,8 @@
 
 Expand system variables Unix style
 
-[![PyPI version](https://img.shields.io/pypi/v/expandvars.svg)](https://pypi.org/project/expandvars)
-[![codecov](https://codecov.io/gh/sayanarijit/expandvars/branch/master/graph/badge.svg)](https://codecov.io/gh/sayanarijit/expandvars)
+[![PyPI version](https://img.shields.io/pypi/v/mrjk.expandvars.svg)](https://pypi.org/project/mrjk.expandvars)
+[![codecov](https://codecov.io/gh/mrjk/python-expandvars/branch/develop/graph/badge.svg)](https://codecov.io/gh/mrjk/python-expandvars)
 
 ## Inspiration
 
@@ -26,16 +26,14 @@ my_nested_variable = "${!NESTED}"
 
 ## Installation
 
-### Pip
-
 ```
-pip install expandvars
+pip install mrjk.expandvars
 ```
 
-### Conda
+Import name is still `expandvars`:
 
-```
-conda install -c conda-forge expandvars
+```python
+from expandvars import expandvars
 ```
 
 ## Usage
@@ -49,7 +47,7 @@ print(expandvars("$PATH:${HOME:?}/bin:${SOME_UNDEFINED_PATH:-/default/path}"))
 
 ## Examples
 
-For now, [refer to the test cases](https://github.com/sayanarijit/expandvars/blob/master/tests) to see how it behaves.
+For now, [refer to the test cases](https://github.com/mrjk/python-expandvars/blob/develop/tests) to see how it behaves.
 
 ## TIPs
 
@@ -98,7 +96,7 @@ Then
 
 ```bash
 # Clone repo
-git clone https://github.com/sayanarijit/expandvars && cd expandvars
+git clone https://github.com/mrjk/python-expandvars && cd python-expandvars
 
 # Setup virtualenv
 python -m venv .venv
