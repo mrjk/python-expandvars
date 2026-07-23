@@ -1,43 +1,50 @@
 [project]
 dynamic = ["version"]
-name = 'expandvars'
-description = 'Expand system variables Unix style'
+name = "mrjk.expandvars"
+description = "Expand system variables Unix style"
 keywords = [
-    'expand',
-    'system',
-    'variables',
+    "expand",
+    "system",
+    "variables",
 ]
 classifiers = [
-    'Development Status :: 4 - Beta',
-    'Intended Audience :: Developers',
-    'Intended Audience :: Information Technology',
-    'Intended Audience :: Other Audience',
-    'License :: OSI Approved :: MIT License',
-    'Natural Language :: English',
-    'Programming Language :: Python :: 3',
-    'Topic :: Utilities',
-    'Topic :: Software Development',
-    'Operating System :: MacOS',
-    'Operating System :: Unix',
-    'Operating System :: POSIX',
-    'Operating System :: Microsoft',
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Other Audience",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Utilities",
+    "Topic :: Software Development",
+    "Operating System :: MacOS",
+    "Operating System :: Unix",
+    "Operating System :: POSIX",
+    "Operating System :: Microsoft",
 ]
-homepage = 'https://github.com/sayanarijit/expandvars'
 authors = [
   {name = "Arijit Basu", email = "sayanarijit@gmail.com"}
 ]
 maintainers = [
-  {name = "Arijit Basu", email = "sayanarijit@gmail.com"}
+  {name = "mrjk", email = "mrjk.78@gmail.com"}
 ]
-readme = 'README.md'
+readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3"
+requires-python = ">=3.9"
 
 [project.urls]
-"Homepage" = "https://github.com/sayanarijit/expandvars"
+Homepage = "https://github.com/mrjk/python-expandvars"
+Repository = "https://github.com/mrjk/python-expandvars"
+Changelog = "https://github.com/mrjk/python-expandvars/blob/develop/CHANGELOG.md"
+Issues = "https://github.com/mrjk/python-expandvars/issues"
 
 [project.optional-dependencies]
-tests = ['tox', 'pytest', 'pytest-cov', 'black']
+tests = ["tox", "pytest", "pytest-cov", "black"]
 
 [build-system]
 requires = ["hatchling"]
@@ -46,5 +53,22 @@ build-backend = "hatchling.build"
 [tool.hatch.version]
 path = "expandvars.py"
 
-[tool.pytest]
-addopts = '--cov --cov-report=html --cov-fail-under=100'
+# Distribution name differs from the importable module.
+[tool.hatch.build.targets.wheel]
+only-include = ["expandvars.py"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/expandvars.py",
+    "/tests",
+    "/LICENSE",
+    "/README.md",
+    "/CHANGELOG.md",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--cov",
+    "--cov-report=html",
+    "--cov-fail-under=100",
+]
