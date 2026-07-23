@@ -4,11 +4,20 @@
 
 Use it when you need defaults, required variables, substrings, or indirection in config values and templates.
 
+## Fork
+
+This is a **fork** of [sayanarijit/expandvars](https://github.com/sayanarijit/expandvars).
+
+It was forked to publish **bug fixes** and **new features** as `mrjk.expandvars` on PyPI (import name stays `expandvars`), with independent maintenance and releases. Upstream is the original project; this fork exists so those improvements can ship without blocking on upstream release timing.
+
+Compared to upstream: `ExpandParser`, `feat_pid` for `$$`, `**kwargs` into the parser, plus fixes for non-string environ values, empty var names, and multi-`$` / `$$` edge cases. See the project [CHANGELOG](https://github.com/mrjk/python-expandvars/blob/develop/CHANGELOG.md).
+
 ## Install
 
 ```bash
 pip install mrjk.expandvars
 ```
+
 ## 30-second example
 
 ```python

@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-07-23
 
 First release of the `mrjk.expandvars` distribution (import remains `expandvars`).
-Fork of [sayanarijit/expandvars](https://github.com/sayanarijit/expandvars).
+
+Fork of [sayanarijit/expandvars](https://github.com/sayanarijit/expandvars), created to ship bug fixes and new features under independent maintenance and PyPI releases.
 
 ### Added
 

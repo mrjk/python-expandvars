@@ -5,6 +5,21 @@ Expand system variables Unix style
 [![PyPI version](https://img.shields.io/pypi/v/mrjk.expandvars.svg)](https://pypi.org/project/mrjk.expandvars)
 [![codecov](https://codecov.io/gh/mrjk/python-expandvars/branch/develop/graph/badge.svg)](https://codecov.io/gh/mrjk/python-expandvars)
 
+## Fork
+
+This project is a **fork** of [sayanarijit/expandvars](https://github.com/sayanarijit/expandvars).
+
+It was forked to ship **bug fixes** and **new features** under an independently maintained package (`mrjk.expandvars` on PyPI), while keeping the same import name (`expandvars`). Upstream remains the original library; this fork exists so those changes can evolve and release on their own schedule.
+
+Notable differences vs upstream:
+
+- **`ExpandParser`** — expansion logic in a reusable parser class
+- **`feat_pid`** — control `$$` (real PID, leave literal, or a custom string)
+- **`**kwargs`** — forwarded from `expand` / `expandvars` into the parser
+- **Fixes** — non-string environ values, empty/invalid var names, multi-`$` / `$$` edge cases
+
+See [CHANGELOG.md](CHANGELOG.md) for details.
+
 ## Inspiration
 
 This module is inspired by [GNU bash's variable expansion features](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html). It can be used as an alternative to Python's [os.path.expandvars](https://docs.python.org/3/library/os.path.html#os.path.expandvars) function.
