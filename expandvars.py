@@ -21,9 +21,9 @@ from io import TextIOWrapper
 
 __author__ = "Arijit Basu"
 __email__ = "sayanarijit@gmail.com"
-__homepage__ = "https://github.com/sayanarijit/expandvars"
+__homepage__ = "https://github.com/mrjk/python-expandvars"
 __description__ = "Expand system variables Unix style"
-__version__ = "v0.12.0"
+__version__ = "1.0.0"
 __license__ = "MIT"
 __all__ = [
     "BadSubstitution",
