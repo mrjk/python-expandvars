@@ -1,5 +1,8 @@
 # expandvars
 
+> **Deprecated.** This project is no longer maintained.
+> Use **[mrjk/python-varstore](https://github.com/mrjk/python-varstore)** instead.
+
 Expand system variables Unix style
 
 [![PyPI version](https://img.shields.io/pypi/v/mrjk.expandvars.svg)](https://pypi.org/project/mrjk.expandvars)
@@ -10,6 +13,8 @@ Expand system variables Unix style
 This project is a **fork** of [sayanarijit/expandvars](https://github.com/sayanarijit/expandvars).
 
 It was forked to ship **bug fixes** and **new features** under an independently maintained package (`mrjk.expandvars` on PyPI), while keeping the same import name (`expandvars`). Upstream remains the original library; this fork exists so those changes can evolve and release on their own schedule.
+
+**Successor:** further development continues in [mrjk/python-varstore](https://github.com/mrjk/python-varstore).
 
 Notable differences vs upstream:
 

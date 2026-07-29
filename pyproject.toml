@@ -1,14 +1,15 @@
 [project]
 dynamic = ["version"]
 name = "mrjk.expandvars"
-description = "Expand system variables Unix style"
+description = "DEPRECATED: use mrjk/python-varstore. Expand system variables Unix style"
 keywords = [
     "expand",
     "system",
     "variables",
+    "deprecated",
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 7 - Inactive",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Other Audience",
@@ -42,6 +43,7 @@ Homepage = "https://github.com/mrjk/python-expandvars"
 Repository = "https://github.com/mrjk/python-expandvars"
 Changelog = "https://github.com/mrjk/python-expandvars/blob/develop/CHANGELOG.md"
 Issues = "https://github.com/mrjk/python-expandvars/issues"
+Successor = "https://github.com/mrjk/python-varstore"
 
 [project.optional-dependencies]
 tests = ["tox", "pytest", "pytest-cov", "black"]
